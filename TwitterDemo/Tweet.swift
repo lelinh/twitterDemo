@@ -9,15 +9,21 @@
 import UIKit
 
 class Tweet: NSObject {
+    var name: String?
     var text: String?
     var timestamp: Date?
     var retweetCount = 0
     var favoritesCount = 0
+    var avatarUrl: URL?
+    var user: User?
     
     init(tweet: NSDictionary) {
+        
         text = tweet["text"] as? String
         retweetCount = (tweet["retweet_count"] as? Int) ?? 0
         favoritesCount = (tweet["favorite_count"] as? Int) ?? 0
+        user = User(user: (tweet["user"] as? NSDictionary)!)
+        
         let timestampString = (tweet["timestamp"] as? String)
 
         if let timestampString = timestampString {

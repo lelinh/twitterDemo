@@ -11,20 +11,19 @@ import AFNetworking
 import BDBOAuth1Manager
 
 class LoginViewController: UIViewController {
+    @IBOutlet weak var loginButton: UIButton!
 
     @IBAction func loginDidClicked(_ sender: UIButton) {
         
-        let callbackURL = URL(string: "linh://")
+        let client = TweeterClient.sharedInstance
         
-        TweeterClient.sharedInstance.fetchRequestToken(withPath: "oauth/request_token", method: "GET", callbackURL: callbackURL, scope: nil, success: { (response: BDBOAuth1Credential?) in
-            if let response = response{
-                print("request token: \(response.token)")
-                let authURL = URL(string: "https://api.twitter.com/oauth/authorize?oauth_token=\(response.token!)")
-                UIApplication.shared.open(authURL!, options: [:], completionHandler: nil)                
-            }
-        }, failure: { (error: Error?) in
-            print(error?.localizedDescription ?? "")
-        })
+        client.login(success: { () -> () in
+            print("login successfully!!")
+            self.performSegue(withIdentifier: "timelineSegue", sender: nil)
+        }){(error: NSError) -> () in
+            print(error)
+        }
+        
     }
     
     
@@ -32,22 +31,17 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        configView()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+}
+extension LoginViewController{
+    func configView() {
+        loginButton.layer.cornerRadius = 7 //set corner for image here
+        loginButton.clipsToBounds = true
     }
-    */
-
 }

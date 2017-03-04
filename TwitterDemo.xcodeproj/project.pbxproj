@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		051423741E6A75F500E3C077 /* TimeLineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051423731E6A75F500E3C077 /* TimeLineViewController.swift */; };
+		051423761E6A853200E3C077 /* TweetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051423751E6A853200E3C077 /* TweetCell.swift */; };
 		05B0D0D21E68726400057500 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B0D0D11E68726400057500 /* AppDelegate.swift */; };
 		05B0D0D71E68726400057500 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 05B0D0D51E68726400057500 /* Main.storyboard */; };
 		05B0D0D91E68726400057500 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 05B0D0D81E68726400057500 /* Assets.xcassets */; };
@@ -19,6 +21,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		051423731E6A75F500E3C077 /* TimeLineViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeLineViewController.swift; sourceTree = "<group>"; };
+		051423751E6A853200E3C077 /* TweetCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TweetCell.swift; sourceTree = "<group>"; };
 		05B0D0CE1E68726400057500 /* TwitterDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwitterDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		05B0D0D11E68726400057500 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		05B0D0D61E68726400057500 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -83,6 +87,7 @@
 			isa = PBXGroup;
 			children = (
 				05B0D0E41E68747000057500 /* LoginViewController.swift */,
+				051423731E6A75F500E3C077 /* TimeLineViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -92,6 +97,7 @@
 			children = (
 				05B0D0E71E69B13300057500 /* User.swift */,
 				05B0D0E91E69B13F00057500 /* Tweet.swift */,
+				051423751E6A853200E3C077 /* TweetCell.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -246,10 +252,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				05B0D0E51E68747000057500 /* LoginViewController.swift in Sources */,
+				051423761E6A853200E3C077 /* TweetCell.swift in Sources */,
 				05B0D0D21E68726400057500 /* AppDelegate.swift in Sources */,
 				05B0D0E81E69B13300057500 /* User.swift in Sources */,
 				05B0D0EA1E69B13F00057500 /* Tweet.swift in Sources */,
 				05B0D0ED1E69BCF800057500 /* TweeterClient.swift in Sources */,
+				051423741E6A75F500E3C077 /* TimeLineViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,0 +1,66 @@
+//
+//  TimeLineViewController.swift
+//  TwitterDemo
+//
+//  Created by Linh Le on 3/4/17.
+//  Copyright © 2017 Linh Le. All rights reserved.
+//
+
+import UIKit
+
+class TimeLineViewController: UIViewController {
+    
+    @IBOutlet weak var logoutButton: UIBarButtonItem!
+
+    
+    @IBAction func logoutClicked(_ sender: UIBarButtonItem) {
+        TweeterClient.sharedInstance.logout()
+    }
+    @IBOutlet weak var TableView: UITableView!
+    
+
+    var tweets = [Tweet]()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        initView()
+        // Do any additional setup after loading the view.
+        print("TimeLineViewController did load")
+        TweeterClient.sharedInstance.getTimeline(success: { (tweets: [Tweet]) in
+            self.tweets = tweets
+            for tweet in tweets{
+                print(tweet.text!)
+            }
+            self.TableView.reloadData()
+        }, failure: { (error: NSError) in
+                print(error.localizedDescription)
+        })
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+
+}
+
+extension TimeLineViewController:UITableViewDelegate,UITableViewDataSource{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return tweets.count
+    }
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "tweetCell", for: indexPath) as! TweetCell
+        let tweet = tweets[indexPath.row]
+        if let user = tweet.user{
+            cell.nameLabel.text = user.name ?? ""
+            cell.avatarImage.setImageWith(user.profileUrl)
+        }
+
+        cell.statusLabel.text = tweet.text ?? ""
+        return cell
+    }
+    func  initView() {
+        TableView.delegate = self
+        TableView.dataSource = self
+    }
+}

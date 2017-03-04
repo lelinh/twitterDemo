@@ -18,6 +18,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+
+        if User.currentUser != nil {
+            TweeterClient.sharedInstance.UserInfo(success: { (user: User) in
+                
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let vc = storyboard.instantiateViewController(withIdentifier: "timelineNavigationController")
+                self.window?.rootViewController = vc
+            }, failure: { (error: NSError) in
+                print(error.localizedDescription)
+            })
+            
+        }
+        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: User.didLogoutNotification), object: nil, queue: OperationQueue.main){ (Notification) -> Void in
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let vc = storyboard.instantiateInitialViewController()
+            self.window?.rootViewController = vc
+        }
         return true
     }
 
@@ -44,23 +61,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
-        let client = TweeterClient.sharedInstance
         
-        let requestToken = BDBOAuth1Credential(queryString: url.query)
-        
-        client.fetchAccessToken(withPath: "oauth/access_token", method: "POST", requestToken: requestToken, success: { (accessToken: BDBOAuth1Credential?) in
-            if let response = accessToken{
-                print("access token: \(response.token)")
-            }
-            client.getTimeline()
-            
-        }, failure: { (error:Error?) in
-            print(error?.localizedDescription ?? "")
-        })
-        
-        
+        TweeterClient.sharedInstance.handleOpenUrl(url: url)
         
         return true
+    }
+    func moveToTweetVC() {
+        // Move to tweet vc
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let tweetNavigationVC = storyboard.instantiateViewController(withIdentifier: "TweetController") as! UINavigationController
+        self.window = UIWindow(frame: UIScreen.main.bounds)
+        self.window?.rootViewController = tweetNavigationVC
+        self.window?.makeKeyAndVisible()
     }
 
 }
