@@ -12,8 +12,8 @@ import BDBOAuth1Manager
 class TweeterClient: BDBOAuth1SessionManager {
     
     static let callbackURL = URL(string: "linh://oauth")
-    static let consumerKey = "5nQZPxT30BfHdTHrHfp7VI5cH"
-    static let consumerSecret = "EYxIALQ6uPsR4Zl06X6n6FgK5yKvYi4Qup3iEGru8p9tYGkdju"
+    static let consumerKey = "3VKEJd65ByyvekZDuPls7WVCS"
+    static let consumerSecret = "hPtK0YH7JLS50Qdp7sZtj5cBLon6oNbJQWcuJK2JhereAbTQI9"
     static let sharedInstance = TweeterClient(baseURL: URL(string: "https://api.twitter.com"), consumerKey: consumerKey, consumerSecret: consumerSecret)!
     
     var loginSuccess: (() -> ())?
@@ -24,7 +24,7 @@ class TweeterClient: BDBOAuth1SessionManager {
         loginSuccess = success
         loginFailure = failure
         
-        fetchRequestToken(withPath: "oauth/request_token", method: "GET", callbackURL: TweeterClient.callbackURL, scope: nil, success: { (response: BDBOAuth1Credential?) in
+        fetchRequestToken(withPath: "oauth/request_token", method: "POST", callbackURL: TweeterClient.callbackURL, scope: nil, success: { (response: BDBOAuth1Credential?) in
             self.loginSuccess = success
             self.loginFailure = failure
             if let response = response{

@@ -33,7 +33,7 @@ class User: NSObject {
     
     //Save cridential for current user
     static var _currentUser: User?
-    static var authorizeStatus: Bool?
+    static var authorizeStatus = true
     class var currentUser: User?{
         get{
             if _currentUser == nil{
@@ -55,7 +55,9 @@ class User: NSObject {
                 let data = try! JSONSerialization.data(withJSONObject: user.dictionary!, options: [])
                 defaults.set(data, forKey: "CurrentUser")
             }else{
-                defaults.set(nil, forKey: "CurrentUser")
+                defaults.removeObject(forKey: "CurrentUser")
+//                defaults.set(nil, forKey: "CurrentUser")
+                print("delete User")
             }
             defaults.synchronize()
         }

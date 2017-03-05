@@ -95,7 +95,7 @@ extension TimeLineViewController:UITableViewDelegate,UITableViewDataSource{
         TableView.rowHeight = UITableViewAutomaticDimension
         
         //Navigation bar color
-        navigationController?.navigationBar.barTintColor = UIColor(red: 66/255, green: 244/255, blue: 232/255, alpha: 1)
+        navigationController?.navigationBar.barTintColor = UIColor(red: 66/255, green: 223/255, blue: 244/255, alpha: 1)
         navigationController?.navigationBar.tintColor = UIColor.white
     }
 }
