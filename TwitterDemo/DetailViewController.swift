@@ -32,6 +32,22 @@ class DetailViewController: UIViewController {
     @IBAction func replyClicked(_ sender: Any) {
     }
     @IBAction func retweetClicked(_ sender: Any) {
+        if (tweet?.retweetState)! {
+            
+            TweeterClient.sharedInstance.unretweet(id: (tweet?.tweetID)!, success: { (tweet: Tweet) in
+                self.retweetButton.setImage(#imageLiteral(resourceName: "retweet_off").withRenderingMode(.alwaysOriginal), for: self.retweetButton.state)
+                self.updateView()
+            }, failure: { (error: NSError) in
+                print(error.localizedDescription)
+            })
+        }else{
+            TweeterClient.sharedInstance.retweet(id: (tweet?.tweetID)!, success: { (tweet: Tweet) in
+                self.retweetButton.setImage(#imageLiteral(resourceName: "retweet_on").withRenderingMode(.alwaysOriginal), for: self.retweetButton.state)
+                self.updateView()
+            }, failure: { (error: NSError) in
+                print(error.localizedDescription)
+            })
+        }
     }
     @IBAction func likeClicked(_ sender: Any) {
         if (tweet?.favoriteState)! {
@@ -40,7 +56,7 @@ class DetailViewController: UIViewController {
                 self.tweet = tweet
                 self.likeButton.setImage(#imageLiteral(resourceName: "like_off").withRenderingMode(.alwaysOriginal), for: self.likeButton.state)
                 
-                self.initView()
+                self.updateView()
             }, failure: { (error: NSError) in
                 print(error.localizedDescription)
             })
@@ -48,7 +64,7 @@ class DetailViewController: UIViewController {
             TweeterClient.sharedInstance.createFavorite(id: (tweet?.tweetID)!, success: { (tweet: Tweet) in
                 self.tweet = tweet
                 self.likeButton.setImage(#imageLiteral(resourceName: "like_on").withRenderingMode(.alwaysOriginal), for: self.likeButton.state)
-                self.initView()
+                self.updateView()
             }, failure: { (error: NSError) in
                 print(error.localizedDescription)
             })
@@ -61,6 +77,7 @@ class DetailViewController: UIViewController {
 
         // Do any additional setup after loading the view.
         initView()
+        updateView()
     }
 
     override func didReceiveMemoryWarning() {
@@ -71,25 +88,36 @@ class DetailViewController: UIViewController {
 extension DetailViewController{
 
     func initView() {
-        nameLabel.text = tweet?.user?.name
-        statusLabel.text = tweet?.text
-        avatarImage.setImageWith((tweet?.user?.profileUrl)!)
-        timestampLabel.text = tweet?.timestamp
-        if let retweetcount = tweet?.retweetCount {
-            retweetCountLabel.text = "\(retweetcount) Retweets"
-        }
-        if let favoritecount = tweet?.favoritesCount {
-            likeCountLabel.text = "\(favoritecount) Likes"
-        }
-        if (tweet?.favoriteState)! {
-            likeButton.setImage(#imageLiteral(resourceName: "like_on").withRenderingMode(.alwaysOriginal), for: likeButton.state)
-        }else{
-            likeButton.setImage(#imageLiteral(resourceName: "like_off").withRenderingMode(.alwaysOriginal), for: likeButton.state)}
-        
-        if (tweet?.retweetState)! {
-            retweetButton.setImage(#imageLiteral(resourceName: "retweet_on").withRenderingMode(.alwaysOriginal), for: .normal)
-        }else{
-            retweetButton.setImage(#imageLiteral(resourceName: "retweet_off").withRenderingMode(.alwaysOriginal), for: .normal)}
+        likeButton.setImage(#imageLiteral(resourceName: "like_off").withRenderingMode(.alwaysOriginal), for: self.likeButton.state)
+        retweetButton.setImage(#imageLiteral(resourceName: "retweet_off").withRenderingMode(.alwaysOriginal), for: .normal)
         replyButton.setImage(#imageLiteral(resourceName: "reply").withRenderingMode(.alwaysOriginal), for: .normal)
+
+    }
+    func updateView(){
+        // Initialization code
+        avatarImage.layer.cornerRadius = 7 //set corner for image here
+        avatarImage.clipsToBounds = true
+        TweeterClient.sharedInstance.showTweet(id: (tweet?.tweetID)!, success: {(tweet: Tweet) in
+            self.tweet = tweet
+            
+            self.nameLabel.text = tweet.user?.name
+            self.statusLabel.text = tweet.text
+            self.avatarImage.setImageWith((tweet.user?.profileUrl)!)
+            self.timestampLabel.text = tweet.timestamp
+            self.retweetCountLabel.text = "\(tweet.retweetCount) Retweets"
+            self.likeCountLabel.text = "\(tweet.favoritesCount) Likes"
+
+            if (tweet.favoriteState)! {
+                self.likeButton.setImage(#imageLiteral(resourceName: "like_on").withRenderingMode(.alwaysOriginal), for: self.likeButton.state)
+            }else{
+                self.likeButton.setImage(#imageLiteral(resourceName: "like_off").withRenderingMode(.alwaysOriginal), for: self.likeButton.state)}
+            
+            if (tweet.retweetState)! {
+                self.retweetButton.setImage(#imageLiteral(resourceName: "retweet_on").withRenderingMode(.alwaysOriginal), for: .normal)
+            }else{
+                self.retweetButton.setImage(#imageLiteral(resourceName: "retweet_off").withRenderingMode(.alwaysOriginal), for: .normal)}
+        }, failure: {(error: NSError) in
+            print(error.localizedDescription)
+        })
     }
 }

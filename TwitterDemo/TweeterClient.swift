@@ -12,8 +12,8 @@ import BDBOAuth1Manager
 class TweeterClient: BDBOAuth1SessionManager {
     
     static let callbackURL = URL(string: "linh://oauth")
-    static let consumerKey = "No8YvX0Lyo4TjUSKvSI4z6Isz"
-    static let consumerSecret = "e5t9AyLKm3Tn5QshlPlK4MyF9Yk5RIo6O6dSsKe6eEihXxKtcD"
+    static let consumerKey = "5nQZPxT30BfHdTHrHfp7VI5cH"
+    static let consumerSecret = "EYxIALQ6uPsR4Zl06X6n6FgK5yKvYi4Qup3iEGru8p9tYGkdju"
     static let sharedInstance = TweeterClient(baseURL: URL(string: "https://api.twitter.com"), consumerKey: consumerKey, consumerSecret: consumerSecret)!
     
     var loginSuccess: (() -> ())?
@@ -40,7 +40,6 @@ class TweeterClient: BDBOAuth1SessionManager {
     func logout() {
         User.currentUser = nil
         deauthorize()
-        
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: User.didLogoutNotification), object: nil)
     }
     func handleOpenUrl(url: URL) {
@@ -91,6 +90,7 @@ class TweeterClient: BDBOAuth1SessionManager {
             failure(error as! NSError)
         })
     }
+    
     func destroyFavorite(id: String, success: @escaping (Tweet) -> (),failure: @escaping (NSError) -> ()) {
         post("1.1/favorites/destroy.json", parameters: ["id":id], progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
             let tweet = Tweet(tweet: response as! NSDictionary)
@@ -99,8 +99,25 @@ class TweeterClient: BDBOAuth1SessionManager {
             failure(error as! NSError)
         })
     }
-    func lookupTweet(id: String, success: @escaping (Tweet) -> (),failure: @escaping (NSError) -> ()) {
-        post("1.1/statuses/lookup.json", parameters: ["id":id], progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
+    func retweet(id: String, success: @escaping (Tweet) -> (),failure: @escaping (NSError) -> ()) {
+        post("1.1/statuses/retweet/\(id).json", parameters: ["id":id], progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
+            let tweet = Tweet(tweet: response as! NSDictionary)
+            success(tweet)
+        }, failure: { (_:URLSessionDataTask?, error:Error?) in
+            print(id)
+            failure(error as! NSError)
+        })
+    }
+    func unretweet(id: String, success: @escaping (Tweet) -> (),failure: @escaping (NSError) -> ()) {
+        post("1.1/statuses/unretweet/\(id).json", parameters: ["id":id], progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
+            let tweet = Tweet(tweet: response as! NSDictionary)
+            success(tweet)
+        }, failure: { (_:URLSessionDataTask?, error:Error?) in
+            failure(error as! NSError)
+        })
+    }
+    func showTweet(id: String, success: @escaping (Tweet) -> (),failure: @escaping (NSError) -> ()) {
+        get("1.1/statuses/show.json", parameters: ["id":id], progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
             let tweet = Tweet(tweet: response as! NSDictionary)
             success(tweet)
         }, failure: { (_:URLSessionDataTask?, error:Error?) in

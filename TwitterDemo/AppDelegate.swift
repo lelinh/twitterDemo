@@ -28,9 +28,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            }, failure: { (error: NSError) in
 //                print(error.localizedDescription)
 //            })
-//            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//            let vc = storyboard.instantiateViewController(withIdentifier: "timelineNavigationController")
-//            self.window?.rootViewController = vc
 //        }
         NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: User.didLogoutNotification), object: nil, queue: OperationQueue.main){ (Notification) -> Void in
             let storyboard = UIStoryboard(name: "Main", bundle: nil)

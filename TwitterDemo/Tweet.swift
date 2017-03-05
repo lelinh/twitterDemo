@@ -21,7 +21,6 @@ class Tweet: NSObject {
     var retweetState:Bool?
     var tweetID: String?
     
-    
     init(tweet: NSDictionary) {
         
         text = tweet["text"] as? String
@@ -31,7 +30,6 @@ class Tweet: NSObject {
         favoriteState  = tweet["favorited"] as? Bool
         retweetState = tweet["retweeted"] as? Bool
         tweetID = tweet["id_str"] as? String
-
         
         let timestampString = (tweet["created_at"] as? String)
 

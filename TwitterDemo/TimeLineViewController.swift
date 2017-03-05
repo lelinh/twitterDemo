@@ -30,12 +30,8 @@ class TimeLineViewController: UIViewController {
         super.viewDidLoad()
         initView()
         // Do any additional setup after loading the view.
-        print("TimeLineViewController did load")
         TweeterClient.sharedInstance.getTimeline(success: { (tweets: [Tweet]) in
             self.tweets = tweets
-            for tweet in tweets{
-                print(tweet.text!)
-            }
             self.TableView.reloadData()
         }, failure: { (error: NSError) in
                 print(error.localizedDescription)
@@ -75,14 +71,13 @@ extension TimeLineViewController:UITableViewDelegate,UITableViewDataSource{
         cell.favoriteState = tweet.favoriteState
         cell.retweetState = tweet.retweetState
         cell.timestampLabel.text = tweet.timestamp
-        
+        if let screenname = tweet.user?.screenName {
+            cell.screenNameLabel.text = "@\(screenname)"
+        }
+        cell.textLabel?.sizeToFit()
         if tweet.favoriteState! {
-            print("favorited")
-            print(cell.favoriteButton.state)
             cell.favoriteButton.setImage(#imageLiteral(resourceName: "like_on").withRenderingMode(.alwaysOriginal), for: cell.favoriteButton.state)
         }else{
-            print("unfavorite")
-            print(cell.favoriteButton.state)
             cell.favoriteButton.setImage(#imageLiteral(resourceName: "like_off").withRenderingMode(.alwaysOriginal), for: cell.favoriteButton.state)}
         
         if tweet.retweetState! {
@@ -96,16 +91,22 @@ extension TimeLineViewController:UITableViewDelegate,UITableViewDataSource{
     func  initView() {
         TableView.delegate = self
         TableView.dataSource = self
+        TableView.estimatedRowHeight = 44.0
+        TableView.rowHeight = UITableViewAutomaticDimension
+        
+        //Navigation bar color
+        navigationController?.navigationBar.barTintColor = UIColor(red: 66/255, green: 244/255, blue: 232/255, alpha: 1)
+        navigationController?.navigationBar.tintColor = UIColor.white
     }
 }
 extension TimeLineViewController:TweetCellDelegate{
     
     func favoriteButtonClicked(cell: TweetCell) {
-        print("\(cell.nameLabel)   \(cell.favoriteState)")
         if cell.favoriteState! {
             TweeterClient.sharedInstance.destroyFavorite(id: cell.id!, success: {(tweet: Tweet) in
                 self.tweets[(self.TableView.indexPath(for: cell)?.row)!] = tweet
                 cell.favoriteButton.setImage(#imageLiteral(resourceName: "like_on").withRenderingMode(.alwaysOriginal), for: cell.favoriteButton.state)
+                //                self.TableView.reloadRows(at: [self.TableView.indexPath(for: cell)!], with: UITableViewRowAnimation.none)
                 self.TableView.reloadData()
             }, failure: {(error: NSError) in
                 print(error.localizedDescription)
@@ -114,7 +115,33 @@ extension TimeLineViewController:TweetCellDelegate{
             TweeterClient.sharedInstance.createFavorite(id: cell.id!, success: {(tweet: Tweet) in
                 self.tweets[(self.TableView.indexPath(for: cell)?.row)!] = tweet
                 cell.favoriteButton.setImage(#imageLiteral(resourceName: "like_off").withRenderingMode(.alwaysOriginal), for: cell.favoriteButton.state)
+                //                self.TableView.reloadRows(at: [self.TableView.indexPath(for: cell)!], with: UITableViewRowAnimation.none)
                 self.TableView.reloadData()
+                
+            }, failure: {(error: NSError) in
+                print(error.localizedDescription)
+            })
+        }
+    }
+    func retweetButtonClicked(cell: TweetCell) {
+        if cell.retweetState! == false {
+            TweeterClient.sharedInstance.retweet(id: cell.id!, success: {(tweet: Tweet) in
+                self.tweets[(self.TableView.indexPath(for: cell)?.row)!].retweetState = true
+                cell.retweetButton.setImage(#imageLiteral(resourceName: "retweet_on").withRenderingMode(.alwaysOriginal), for: cell.retweetButton.state)
+                //                self.TableView.reloadRows(at: [self.TableView.indexPath(for: cell)!], with: UITableViewRowAnimation.none)
+
+                self.TableView.reloadData()
+            }, failure: {(error: NSError) in
+                print(error.localizedDescription)
+            })
+        }else{
+            TweeterClient.sharedInstance.unretweet(id: cell.id!, success: {(tweet: Tweet) in
+                self.tweets[(self.TableView.indexPath(for: cell)?.row)!].retweetState = false
+                cell.retweetButton.setImage(#imageLiteral(resourceName: "retweet_off").withRenderingMode(.alwaysOriginal), for: cell.retweetButton.state)
+                //                self.TableView.reload
+                
+                self.TableView.reloadData()
+                
             }, failure: {(error: NSError) in
                 print(error.localizedDescription)
             })
@@ -127,27 +154,25 @@ extension TimeLineViewController{
             selectedRow = (TableView.indexPathForSelectedRow?.row)!
             let destinationVC = segue.destination as? DetailViewController
             destinationVC?.tweet = tweets[selectedRow]
-            print("tweet: \(selectedRow)")
-            print(tweets[selectedRow].user)
         }
-//        } else if segue.identifier == "newTweet" {
-//            let destinationVC = segue.destination as? NewTweetViewController
-//            if let destinationVC = destinationVC {
-//                destinationVC.vcDelegate = self
-//            }
-//        }
     }
     func refreshControlAction(refreshController: UIRefreshControl) {
         TweeterClient.sharedInstance.getTimeline(success: { (tweets: [Tweet]) in
             self.tweets = tweets
-            for tweet in tweets{
-                print(tweet.text!)
-            }
             self.refreshController.endRefreshing()
             self.TableView.reloadData()
         }, failure: { (error: NSError) in
+            self.refreshController.endRefreshing()
             print(error.localizedDescription)
         })
 
+    }
+    override func viewWillAppear(_ animated: Bool) {
+//        TweeterClient.sharedInstance.getTimeline(success: { (tweets: [Tweet]) in
+//            self.tweets = tweets
+//            self.TableView.reloadData()
+//        }, failure: { (error: NSError) in
+//            print(error.localizedDescription)
+//        })
     }
 }

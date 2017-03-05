@@ -18,12 +18,16 @@ class ComposeViewController: UIViewController {
     @IBOutlet weak var remainCountLabel: UILabel!
     
     @IBAction func tweetClicked(_ sender: Any) {
-        TweeterClient.sharedInstance.updateStatus(status: composeTextView.text, success: {(tweet: Tweet) in
-            print("status is updated")
-        },failure: {(error: NSError) in
-            print(error.localizedDescription)
-        })
-        _ = navigationController?.popViewController(animated: true)
+        if composeTextView.text.characters.count>0 {
+            TweeterClient.sharedInstance.updateStatus(status: composeTextView.text, success: {(tweet: Tweet) in
+                print("status is updated")
+            },failure: {(error: NSError) in
+                print(error.localizedDescription)
+            })
+            _ = navigationController?.popViewController(animated: true)
+        }else{
+            print("tweet fail")
+        }
     }
     
     override func viewDidLoad() {
@@ -33,7 +37,10 @@ class ComposeViewController: UIViewController {
         avatarImage.setImageWith((User.currentUser?.profileUrl)!)
         nameLabel.text = User.currentUser?.name
         remainCountLabel.text = "140"
-        
+        // Initialization code
+        avatarImage.layer.cornerRadius = 7 //set corner for image here
+        avatarImage.clipsToBounds = true
+        composeTextView.becomeFirstResponder()
         composeTextView.delegate = self
 
     }

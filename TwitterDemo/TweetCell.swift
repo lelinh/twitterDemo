@@ -10,7 +10,7 @@ import UIKit
 
 @objc protocol TweetCellDelegate {
     @objc optional func favoriteButtonClicked(cell: UITableViewCell)
-    @objc optional func retweetButtonClicked(id: String)
+    @objc optional func retweetButtonClicked(cell: UITableViewCell)
 }
 
 class TweetCell: UITableViewCell {
@@ -21,6 +21,7 @@ class TweetCell: UITableViewCell {
     @IBOutlet weak var timestampLabel: UILabel!
     @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var replyButton: UIButton!
+    @IBOutlet weak var screenNameLabel: UILabel!
     @IBOutlet weak var retweetButton: UIButton!
     @IBOutlet weak var favoriteButton: UIButton!
     
@@ -34,6 +35,7 @@ class TweetCell: UITableViewCell {
     @IBAction func replyClick(_ sender: UIButton) {
     }
     @IBAction func retweetClicked(_ sender: UIButton) {
+        delegate.retweetButtonClicked!(cell: self)
     }
     @IBAction func favoriteClicked(_ sender: UIButton) {
         delegate.favoriteButtonClicked!(cell: self)
