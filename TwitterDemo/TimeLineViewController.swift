@@ -7,6 +7,9 @@
 //
 
 import UIKit
+import NSDate_TimeAgo
+import AFNetworking
+import BDBOAuth1Manager
 
 class TimeLineViewController: UIViewController {
     
@@ -20,7 +23,9 @@ class TimeLineViewController: UIViewController {
     
 
     var tweets = [Tweet]()
-    
+    var selectedRow = 0
+    // Initialize a UIRefreshControl
+    let refreshController = UIRefreshControl()
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
@@ -35,6 +40,12 @@ class TimeLineViewController: UIViewController {
         }, failure: { (error: NSError) in
                 print(error.localizedDescription)
         })
+        
+        //Add refresh database
+        refreshController.addTarget(self, action: #selector(refreshControlAction(refreshController:)), for: UIControlEvents.valueChanged)
+        TableView.insertSubview(refreshController, at: 0)
+        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: 320, height: 50))
+        headerView.backgroundColor = UIColor(white: 1, alpha: 0.9)
     }
 
     override func didReceiveMemoryWarning() {
@@ -48,17 +59,23 @@ extension TimeLineViewController:UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tweets.count
     }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "tweetCell", for: indexPath) as! TweetCell
         let tweet = tweets[indexPath.row]
         if let user = tweet.user{
-            cell.nameLabel.text = user.name ?? ""
+            cell.nameLabel.text = user.name
             cell.avatarImage.setImageWith(user.profileUrl)
         }
 
-        cell.statusLabel.text = tweet.text ?? ""
+        cell.statusLabel.text = tweet.text
         cell.favoriteState = tweet.favoriteState
         cell.retweetState = tweet.retweetState
+        cell.timestampLabel.text = tweet.timestamp
+        
         if tweet.favoriteState! {
             print("favorited")
             print(cell.favoriteButton.state)
@@ -106,19 +123,31 @@ extension TimeLineViewController:TweetCellDelegate{
 }
 extension TimeLineViewController{
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showDetail" {
+        if segue.identifier == "tweetDetail" {
+            selectedRow = (TableView.indexPathForSelectedRow?.row)!
             let destinationVC = segue.destination as? DetailViewController
-//            let tweet =
-//            if let destinationVC = destinationVC {
-//                destinationVC.tweetDetail = tweets[]
-//                destinationVC.position = selectedIndex
-//                destinationVC.vcDelegate = self
-            }
+            destinationVC?.tweet = tweets[selectedRow]
+            print("tweet: \(selectedRow)")
+            print(tweets[selectedRow].user)
+        }
 //        } else if segue.identifier == "newTweet" {
 //            let destinationVC = segue.destination as? NewTweetViewController
 //            if let destinationVC = destinationVC {
 //                destinationVC.vcDelegate = self
 //            }
 //        }
+    }
+    func refreshControlAction(refreshController: UIRefreshControl) {
+        TweeterClient.sharedInstance.getTimeline(success: { (tweets: [Tweet]) in
+            self.tweets = tweets
+            for tweet in tweets{
+                print(tweet.text!)
+            }
+            self.refreshController.endRefreshing()
+            self.TableView.reloadData()
+        }, failure: { (error: NSError) in
+            print(error.localizedDescription)
+        })
+
     }
 }

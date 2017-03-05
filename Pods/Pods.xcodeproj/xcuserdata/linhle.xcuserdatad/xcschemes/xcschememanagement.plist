@@ -14,6 +14,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>NSDate+TimeAgo.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-TwitterDemo.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -22,7 +27,12 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>296F4773CA6CBC2913FB14C99884439E</key>
+		<key>9A664FD395EC4C1AFB9459F3A6BFF753</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>A43BCDF307049D0C3BA65D02098EB29F</key>
 		<dict>
 			<key>primary</key>
 			<true/>

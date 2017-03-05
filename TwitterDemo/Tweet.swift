@@ -7,18 +7,20 @@
 //
 
 import UIKit
+import NSDate_TimeAgo
 
 class Tweet: NSObject {
-    var name: String?
+
     var text: String?
-    var timestamp: Date?
+    var timestamp: String?
     var retweetCount = 0
     var favoritesCount = 0
-    var avatarUrl: URL?
+
     var user: User?
     var favoriteState: Bool?
     var retweetState:Bool?
     var tweetID: String?
+    
     
     init(tweet: NSDictionary) {
         
@@ -29,13 +31,16 @@ class Tweet: NSObject {
         favoriteState  = tweet["favorited"] as? Bool
         retweetState = tweet["retweeted"] as? Bool
         tweetID = tweet["id_str"] as? String
+
         
-        let timestampString = (tweet["timestamp"] as? String)
+        let timestampString = (tweet["created_at"] as? String)
 
         if let timestampString = timestampString {
             let formatter = DateFormatter()
-            formatter.dateFormat = "EEE MMM d HH:mm:ss Z y"
-            timestamp = formatter.date(from: timestampString)
+            formatter.dateFormat = "EEE MMM dd HH:mm:ss Z y"
+            let time = formatter.date(from: timestampString)
+            formatter.dateFormat = "MMM d, h:mm a"
+            timestamp = formatter.string(from:time! as Date)
         }
     }
     

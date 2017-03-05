@@ -10,6 +10,7 @@
 		051423741E6A75F500E3C077 /* TimeLineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051423731E6A75F500E3C077 /* TimeLineViewController.swift */; };
 		051423761E6A853200E3C077 /* TweetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051423751E6A853200E3C077 /* TweetCell.swift */; };
 		053F814F1E6C02A500F6B2E2 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053F814E1E6C02A500F6B2E2 /* DetailViewController.swift */; };
+		0597F20C1E6C381D00BFC577 /* ComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0597F20B1E6C381D00BFC577 /* ComposeViewController.swift */; };
 		05B0D0D21E68726400057500 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B0D0D11E68726400057500 /* AppDelegate.swift */; };
 		05B0D0D71E68726400057500 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 05B0D0D51E68726400057500 /* Main.storyboard */; };
 		05B0D0D91E68726400057500 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 05B0D0D81E68726400057500 /* Assets.xcassets */; };
@@ -25,6 +26,7 @@
 		051423731E6A75F500E3C077 /* TimeLineViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeLineViewController.swift; sourceTree = "<group>"; };
 		051423751E6A853200E3C077 /* TweetCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TweetCell.swift; sourceTree = "<group>"; };
 		053F814E1E6C02A500F6B2E2 /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		0597F20B1E6C381D00BFC577 /* ComposeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComposeViewController.swift; sourceTree = "<group>"; };
 		05B0D0CE1E68726400057500 /* TwitterDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwitterDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		05B0D0D11E68726400057500 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		05B0D0D61E68726400057500 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -91,6 +93,7 @@
 				05B0D0E41E68747000057500 /* LoginViewController.swift */,
 				051423731E6A75F500E3C077 /* TimeLineViewController.swift */,
 				053F814E1E6C02A500F6B2E2 /* DetailViewController.swift */,
+				0597F20B1E6C381D00BFC577 /* ComposeViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -254,6 +257,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0597F20C1E6C381D00BFC577 /* ComposeViewController.swift in Sources */,
 				05B0D0E51E68747000057500 /* LoginViewController.swift in Sources */,
 				051423761E6A853200E3C077 /* TweetCell.swift in Sources */,
 				05B0D0D21E68726400057500 /* AppDelegate.swift in Sources */,
@@ -385,6 +389,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 8D5SZ9A5H3;
 				INFOPLIST_FILE = TwitterDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = linken.TwitterDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -399,6 +404,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 8D5SZ9A5H3;
 				INFOPLIST_FILE = TwitterDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = linken.TwitterDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";

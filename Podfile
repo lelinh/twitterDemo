@@ -8,5 +8,6 @@ target 'TwitterDemo' do
   # Pods for TwitterDemo
     pod "AFNetworking"
     pod "BDBOAuth1Manager"
+    pod “NSDate+TimeAgo”
 
 end

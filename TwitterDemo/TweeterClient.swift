@@ -74,9 +74,8 @@ class TweeterClient: BDBOAuth1SessionManager {
             failure(error as! NSError)
         })
     }
-    func createFavorite(id: String, success: @escaping (Tweet) -> (),failure: @escaping (NSError) -> ()) {
-        print(" Favorite")
-        post("1.1/favorites/create.json", parameters: ["id":id], progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
+    func updateStatus(status: String, success: @escaping (Tweet) -> (),failure: @escaping (NSError) -> ()) {
+        post("1.1/statuses/update.json", parameters: ["status":status], progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
             print("liked: \(response)")
             let tweet = Tweet(tweet: response as! NSDictionary)
             success(tweet)
@@ -84,10 +83,16 @@ class TweeterClient: BDBOAuth1SessionManager {
             failure(error as! NSError)
         })
     }
+    func createFavorite(id: String, success: @escaping (Tweet) -> (),failure: @escaping (NSError) -> ()) {
+        post("1.1/favorites/create.json", parameters: ["id":id], progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
+            let tweet = Tweet(tweet: response as! NSDictionary)
+            success(tweet)
+        }, failure: { (_:URLSessionDataTask?, error:Error?) in
+            failure(error as! NSError)
+        })
+    }
     func destroyFavorite(id: String, success: @escaping (Tweet) -> (),failure: @escaping (NSError) -> ()) {
-        print("undo Favorite")
         post("1.1/favorites/destroy.json", parameters: ["id":id], progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
-            print("unliked: \(response)")
             let tweet = Tweet(tweet: response as! NSDictionary)
             success(tweet)
         }, failure: { (_:URLSessionDataTask?, error:Error?) in
@@ -95,9 +100,7 @@ class TweeterClient: BDBOAuth1SessionManager {
         })
     }
     func lookupTweet(id: String, success: @escaping (Tweet) -> (),failure: @escaping (NSError) -> ()) {
-        print("undo Favorite")
         post("1.1/statuses/lookup.json", parameters: ["id":id], progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
-            print("unliked: \(response)")
             let tweet = Tweet(tweet: response as! NSDictionary)
             success(tweet)
         }, failure: { (_:URLSessionDataTask?, error:Error?) in
@@ -106,7 +109,7 @@ class TweeterClient: BDBOAuth1SessionManager {
     }
     func UserInfo(success: @escaping (User) -> (),failure: @escaping (NSError) -> ()) {
         get("1.1/account/verify_credentials.json", parameters: nil, progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
-            print("my account: \(response)")
+            print("user account: \(response)")
             let user = User(user: response as! NSDictionary)
             success(user)
         }, failure: { (_:URLSessionDataTask?, error:Error?) in
