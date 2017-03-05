@@ -87,6 +87,7 @@ extension TimeLineViewController:TweetCellDelegate{
         print("\(cell.nameLabel)   \(cell.favoriteState)")
         if cell.favoriteState! {
             TweeterClient.sharedInstance.destroyFavorite(id: cell.id!, success: {(tweet: Tweet) in
+                self.tweets[(self.TableView.indexPath(for: cell)?.row)!] = tweet
                 cell.favoriteButton.setImage(#imageLiteral(resourceName: "like_on").withRenderingMode(.alwaysOriginal), for: cell.favoriteButton.state)
                 self.TableView.reloadData()
             }, failure: {(error: NSError) in
@@ -94,11 +95,30 @@ extension TimeLineViewController:TweetCellDelegate{
             })
         }else{
             TweeterClient.sharedInstance.createFavorite(id: cell.id!, success: {(tweet: Tweet) in
+                self.tweets[(self.TableView.indexPath(for: cell)?.row)!] = tweet
                 cell.favoriteButton.setImage(#imageLiteral(resourceName: "like_off").withRenderingMode(.alwaysOriginal), for: cell.favoriteButton.state)
                 self.TableView.reloadData()
             }, failure: {(error: NSError) in
                 print(error.localizedDescription)
             })
         }
+    }
+}
+extension TimeLineViewController{
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showDetail" {
+            let destinationVC = segue.destination as? DetailViewController
+//            let tweet =
+//            if let destinationVC = destinationVC {
+//                destinationVC.tweetDetail = tweets[]
+//                destinationVC.position = selectedIndex
+//                destinationVC.vcDelegate = self
+            }
+//        } else if segue.identifier == "newTweet" {
+//            let destinationVC = segue.destination as? NewTweetViewController
+//            if let destinationVC = destinationVC {
+//                destinationVC.vcDelegate = self
+//            }
+//        }
     }
 }

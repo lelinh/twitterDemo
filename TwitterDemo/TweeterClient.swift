@@ -106,8 +106,8 @@ class TweeterClient: BDBOAuth1SessionManager {
     func UserInfo(success: @escaping (User) -> (),failure: @escaping (NSError) -> ()) {
         get("1.1/account/verify_credentials.json", parameters: nil, progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
             print("my account: \(response)")
-//            let user = User(user: response as! NSDictionary)
-//            success(user)
+            let user = User(user: response as! NSDictionary)
+            success(user)
         }, failure: { (_:URLSessionDataTask?, error:Error?) in
             print(error?.localizedDescription)
             failure(error as! NSError)

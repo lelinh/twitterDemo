@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		051423741E6A75F500E3C077 /* TimeLineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051423731E6A75F500E3C077 /* TimeLineViewController.swift */; };
 		051423761E6A853200E3C077 /* TweetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051423751E6A853200E3C077 /* TweetCell.swift */; };
+		053F814F1E6C02A500F6B2E2 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053F814E1E6C02A500F6B2E2 /* DetailViewController.swift */; };
 		05B0D0D21E68726400057500 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B0D0D11E68726400057500 /* AppDelegate.swift */; };
 		05B0D0D71E68726400057500 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 05B0D0D51E68726400057500 /* Main.storyboard */; };
 		05B0D0D91E68726400057500 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 05B0D0D81E68726400057500 /* Assets.xcassets */; };
@@ -23,6 +24,7 @@
 /* Begin PBXFileReference section */
 		051423731E6A75F500E3C077 /* TimeLineViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeLineViewController.swift; sourceTree = "<group>"; };
 		051423751E6A853200E3C077 /* TweetCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TweetCell.swift; sourceTree = "<group>"; };
+		053F814E1E6C02A500F6B2E2 /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		05B0D0CE1E68726400057500 /* TwitterDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwitterDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		05B0D0D11E68726400057500 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		05B0D0D61E68726400057500 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -88,6 +90,7 @@
 			children = (
 				05B0D0E41E68747000057500 /* LoginViewController.swift */,
 				051423731E6A75F500E3C077 /* TimeLineViewController.swift */,
+				053F814E1E6C02A500F6B2E2 /* DetailViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -258,6 +261,7 @@
 				05B0D0EA1E69B13F00057500 /* Tweet.swift in Sources */,
 				05B0D0ED1E69BCF800057500 /* TweeterClient.swift in Sources */,
 				051423741E6A75F500E3C077 /* TimeLineViewController.swift in Sources */,
+				053F814F1E6C02A500F6B2E2 /* DetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
