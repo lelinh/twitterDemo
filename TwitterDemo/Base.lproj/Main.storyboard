@@ -216,7 +216,7 @@
         <!--Detail View Controller-->
         <scene sceneID="adn-xg-27h">
             <objects>
-                <viewController id="nyb-bc-4Ly" customClass="DetailViewController" customModule="TwitterDemo" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="nyb-bc-4Ly" customClass="DetailViewController" customModule="TwitterDemo" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="CA6-wR-DOF"/>
                         <viewControllerLayoutGuide type="bottom" id="9HS-CM-sFD"/>
@@ -224,7 +224,38 @@
                     <view key="view" contentMode="scaleToFill" id="2By-Ak-Rwn">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tFY-mP-2b9">
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="zNW-sI-AcJ">
+                                        <rect key="frame" x="8" y="8" width="37" height="37"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="37" id="Pyc-ge-Se8"/>
+                                            <constraint firstAttribute="height" constant="37" id="oUQ-Fv-m8n"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8fm-dT-phC">
+                                        <rect key="frame" x="70" y="16" width="42" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="zNW-sI-AcJ" firstAttribute="leading" secondItem="tFY-mP-2b9" secondAttribute="leading" constant="8" id="3WE-nx-mwc"/>
+                                    <constraint firstItem="zNW-sI-AcJ" firstAttribute="top" secondItem="tFY-mP-2b9" secondAttribute="top" constant="8" id="7B0-n6-Lpu"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="tFY-mP-2b9" secondAttribute="trailing" id="NxF-vG-ago"/>
+                            <constraint firstItem="tFY-mP-2b9" firstAttribute="top" secondItem="CA6-wR-DOF" secondAttribute="bottom" id="XC8-F1-W8k"/>
+                            <constraint firstItem="tFY-mP-2b9" firstAttribute="leading" secondItem="2By-Ak-Rwn" secondAttribute="leading" id="dWw-Ia-acX"/>
+                            <constraint firstItem="9HS-CM-sFD" firstAttribute="top" secondItem="tFY-mP-2b9" secondAttribute="bottom" id="jot-KA-Zea"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="h56-gZ-9dO"/>
                 </viewController>

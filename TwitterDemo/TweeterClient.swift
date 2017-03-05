@@ -44,9 +44,10 @@ class TweeterClient: BDBOAuth1SessionManager {
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: User.didLogoutNotification), object: nil)
     }
     func handleOpenUrl(url: URL) {
+        print(url)
         let requestToken = BDBOAuth1Credential(queryString: url.query)
         fetchAccessToken(withPath: "oauth/access_token", method: "POST", requestToken: requestToken, success: { (accessToken: BDBOAuth1Credential?) in
-            
+            print("access token = \(accessToken!.token)")
             self.UserInfo(success: { (user: User) in
                 User.currentUser = user
                 self.loginSuccess?()
