@@ -8,6 +8,11 @@
 
 import UIKit
 
+@objc protocol TweetCellDelegate {
+    @objc optional func favoriteButtonClicked(cell: UITableViewCell)
+    @objc optional func retweetButtonClicked(id: String)
+}
+
 class TweetCell: UITableViewCell {
 
     
@@ -19,21 +24,24 @@ class TweetCell: UITableViewCell {
     @IBOutlet weak var retweetButton: UIButton!
     @IBOutlet weak var favoriteButton: UIButton!
     
+    var favoriteState: Bool?
+    var retweetState: Bool?
+    var id: String?
     
     
-    
+    weak var delegate: TweetCellDelegate!
     
     @IBAction func replyClick(_ sender: UIButton) {
     }
     @IBAction func retweetClicked(_ sender: UIButton) {
     }
     @IBAction func favoriteClicked(_ sender: UIButton) {
+        delegate.favoriteButtonClicked!(cell: self)
     }
-    
-    
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        replyButton.setImage(#imageLiteral(resourceName: "reply").withRenderingMode(.alwaysOriginal), for: .normal)
         // Initialization code
         avatarImage.layer.cornerRadius = 7 //set corner for image here
         avatarImage.clipsToBounds = true

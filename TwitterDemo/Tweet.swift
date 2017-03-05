@@ -16,6 +16,9 @@ class Tweet: NSObject {
     var favoritesCount = 0
     var avatarUrl: URL?
     var user: User?
+    var favoriteState: Bool?
+    var retweetState:Bool?
+    var tweetID: String?
     
     init(tweet: NSDictionary) {
         
@@ -23,6 +26,9 @@ class Tweet: NSObject {
         retweetCount = (tweet["retweet_count"] as? Int) ?? 0
         favoritesCount = (tweet["favorite_count"] as? Int) ?? 0
         user = User(user: (tweet["user"] as? NSDictionary)!)
+        favoriteState  = tweet["favorited"] as? Bool
+        retweetState = tweet["retweeted"] as? Bool
+        tweetID = tweet["id_str"] as? String
         
         let timestampString = (tweet["timestamp"] as? String)
 

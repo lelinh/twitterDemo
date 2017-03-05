@@ -12,8 +12,8 @@ import BDBOAuth1Manager
 class TweeterClient: BDBOAuth1SessionManager {
     
     static let callbackURL = URL(string: "linh://oauth")
-    static let consumerKey = "oecUuV0VSomXkKoLlRysUBx9f"
-    static let consumerSecret = "YREG9x6YL93WhrSIyxWK9fSzkoV0gYeMZGnFDrbsB1LaBZBXdm"
+    static let consumerKey = "No8YvX0Lyo4TjUSKvSI4z6Isz"
+    static let consumerSecret = "e5t9AyLKm3Tn5QshlPlK4MyF9Yk5RIo6O6dSsKe6eEihXxKtcD"
     static let sharedInstance = TweeterClient(baseURL: URL(string: "https://api.twitter.com"), consumerKey: consumerKey, consumerSecret: consumerSecret)!
     
     var loginSuccess: (() -> ())?
@@ -73,14 +73,45 @@ class TweeterClient: BDBOAuth1SessionManager {
             failure(error as! NSError)
         })
     }
-    
-    func UserInfo(success: @escaping (User) -> (),failure: @escaping (NSError) -> ()) {
-        get("1.1/account/verify_credentials.json", parameters: nil, progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
-            print("my account: \(response)")
-            let user = User(user: response as! NSDictionary)
-            success(user)
+    func createFavorite(id: String, success: @escaping (Tweet) -> (),failure: @escaping (NSError) -> ()) {
+        print(" Favorite")
+        post("1.1/favorites/create.json", parameters: ["id":id], progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
+            print("liked: \(response)")
+            let tweet = Tweet(tweet: response as! NSDictionary)
+            success(tweet)
         }, failure: { (_:URLSessionDataTask?, error:Error?) in
             failure(error as! NSError)
         })
     }
+    func destroyFavorite(id: String, success: @escaping (Tweet) -> (),failure: @escaping (NSError) -> ()) {
+        print("undo Favorite")
+        post("1.1/favorites/destroy.json", parameters: ["id":id], progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
+            print("unliked: \(response)")
+            let tweet = Tweet(tweet: response as! NSDictionary)
+            success(tweet)
+        }, failure: { (_:URLSessionDataTask?, error:Error?) in
+            failure(error as! NSError)
+        })
+    }
+    func lookupTweet(id: String, success: @escaping (Tweet) -> (),failure: @escaping (NSError) -> ()) {
+        print("undo Favorite")
+        post("1.1/statuses/lookup.json", parameters: ["id":id], progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
+            print("unliked: \(response)")
+            let tweet = Tweet(tweet: response as! NSDictionary)
+            success(tweet)
+        }, failure: { (_:URLSessionDataTask?, error:Error?) in
+            failure(error as! NSError)
+        })
+    }
+    func UserInfo(success: @escaping (User) -> (),failure: @escaping (NSError) -> ()) {
+        get("1.1/account/verify_credentials.json", parameters: nil, progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
+            print("my account: \(response)")
+//            let user = User(user: response as! NSDictionary)
+//            success(user)
+        }, failure: { (_:URLSessionDataTask?, error:Error?) in
+            print(error?.localizedDescription)
+            failure(error as! NSError)
+        })
+    }
+
 }

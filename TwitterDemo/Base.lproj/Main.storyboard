@@ -82,7 +82,7 @@
                                         <rect key="frame" x="0.0" y="28" width="320" height="137"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="7AM-08-4YP" id="nYi-9I-h7Z">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="136"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="136.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Nmg-Sg-QuZ">
@@ -130,13 +130,15 @@
                                                         <action selector="retweetClicked:" destination="7AM-08-4YP" eventType="touchUpInside" id="5IK-cd-dpb"/>
                                                     </connections>
                                                 </button>
-                                                <button opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mZN-S3-V07">
+                                                <button opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mZN-S3-V07">
                                                     <rect key="frame" x="153" y="108" width="20" height="20"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="20" id="XoP-mC-dPa"/>
                                                         <constraint firstAttribute="width" constant="20" id="fzY-hb-hr3"/>
                                                     </constraints>
-                                                    <state key="normal" title="Button"/>
+                                                    <state key="normal" title="Button">
+                                                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                    </state>
                                                     <connections>
                                                         <action selector="favoriteClicked:" destination="7AM-08-4YP" eventType="touchUpInside" id="bnN-Gq-ByF"/>
                                                     </connections>

@@ -6,15 +6,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TwitterDemo/User.swift"
-            timestampString = "510335212.113077"
+            timestampString = "510391688.991937"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "52"
-            endingLineNumber = "52"
+            startingLineNumber = "42"
+            endingLineNumber = "42"
             landmarkName = "User"
             landmarkType = "3">
          </BreakpointContent>
@@ -22,15 +22,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TwitterDemo/User.swift"
-            timestampString = "510335414.518381"
+            timestampString = "510391712.145571"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "55"
-            endingLineNumber = "55"
+            startingLineNumber = "45"
+            endingLineNumber = "45"
             landmarkName = "User"
             landmarkType = "3">
          </BreakpointContent>
@@ -38,48 +38,64 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "TwitterDemo/User.swift"
-            timestampString = "510335416.256253"
+            filePath = "TwitterDemo/TweeterClient.swift"
+            timestampString = "510392497.339751"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "57"
-            endingLineNumber = "57"
-            landmarkName = "User"
-            landmarkType = "3">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "TwitterDemo/AppDelegate.swift"
-            timestampString = "510335509.632093"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "25"
-            endingLineNumber = "25"
-            landmarkName = "application(_:didFinishLaunchingWithOptions:)"
+            startingLineNumber = "109"
+            endingLineNumber = "109"
+            landmarkName = "UserInfo(success:failure:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TwitterDemo.TweeterClient.(UserInfo (success : (TwitterDemo.User) -&gt; (), failure : (__ObjC.NSError) -&gt; ()) -&gt; ()).(closure #1)"
+                  moduleName = "TwitterDemo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mac/Desktop/workplaces/TwitterDemo/TwitterDemo/TweeterClient.swift"
+                  timestampString = "510392507.081086"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "111"
+                  endingLineNumber = "111"
+                  offsetFromSymbolStart = "521">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TwitterDemo.TweeterClient.(UserInfo (success : (TwitterDemo.User) -&gt; (), failure : (__ObjC.NSError) -&gt; ()) -&gt; ()).(closure #2)"
+                  moduleName = "TwitterDemo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mac/Desktop/workplaces/TwitterDemo/TwitterDemo/TweeterClient.swift"
+                  timestampString = "510392507.084311"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "112"
+                  endingLineNumber = "112"
+                  offsetFromSymbolStart = "63">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "TwitterDemo/AppDelegate.swift"
-            timestampString = "510335512.970189"
+            filePath = "TwitterDemo/TweeterClient.swift"
+            timestampString = "510392499.347952"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "29"
-            endingLineNumber = "29"
-            landmarkName = "application(_:didFinishLaunchingWithOptions:)"
+            startingLineNumber = "113"
+            endingLineNumber = "113"
+            landmarkName = "UserInfo(success:failure:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -57,10 +57,48 @@ extension TimeLineViewController:UITableViewDelegate,UITableViewDataSource{
         }
 
         cell.statusLabel.text = tweet.text ?? ""
+        cell.favoriteState = tweet.favoriteState
+        cell.retweetState = tweet.retweetState
+        if tweet.favoriteState! {
+            print("favorited")
+            print(cell.favoriteButton.state)
+            cell.favoriteButton.setImage(#imageLiteral(resourceName: "like_on").withRenderingMode(.alwaysOriginal), for: cell.favoriteButton.state)
+        }else{
+            print("unfavorite")
+            print(cell.favoriteButton.state)
+            cell.favoriteButton.setImage(#imageLiteral(resourceName: "like_off").withRenderingMode(.alwaysOriginal), for: cell.favoriteButton.state)}
+        
+        if tweet.retweetState! {
+            cell.retweetButton.setImage(#imageLiteral(resourceName: "retweet_on").withRenderingMode(.alwaysOriginal), for: .normal)
+        }else{
+            cell.retweetButton.setImage(#imageLiteral(resourceName: "retweet_off").withRenderingMode(.alwaysOriginal), for: .normal)}
+        cell.id = tweet.tweetID
+        cell.delegate = self
         return cell
     }
     func  initView() {
         TableView.delegate = self
         TableView.dataSource = self
+    }
+}
+extension TimeLineViewController:TweetCellDelegate{
+    
+    func favoriteButtonClicked(cell: TweetCell) {
+        print("\(cell.nameLabel)   \(cell.favoriteState)")
+        if cell.favoriteState! {
+            TweeterClient.sharedInstance.destroyFavorite(id: cell.id!, success: {(tweet: Tweet) in
+                cell.favoriteButton.setImage(#imageLiteral(resourceName: "like_on").withRenderingMode(.alwaysOriginal), for: cell.favoriteButton.state)
+                self.TableView.reloadData()
+            }, failure: {(error: NSError) in
+                print(error.localizedDescription)
+            })
+        }else{
+            TweeterClient.sharedInstance.createFavorite(id: cell.id!, success: {(tweet: Tweet) in
+                cell.favoriteButton.setImage(#imageLiteral(resourceName: "like_off").withRenderingMode(.alwaysOriginal), for: cell.favoriteButton.state)
+                self.TableView.reloadData()
+            }, failure: {(error: NSError) in
+                print(error.localizedDescription)
+            })
+        }
     }
 }

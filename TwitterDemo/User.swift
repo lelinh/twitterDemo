@@ -44,6 +44,7 @@ class User: NSObject {
                     let dictionary = try! JSONSerialization.jsonObject(with: userData as Data, options: []) as! NSDictionary
                     _currentUser = User(user: dictionary)
                 }
+                
             }
             return _currentUser
         }
