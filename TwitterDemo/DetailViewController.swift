@@ -120,4 +120,10 @@ extension DetailViewController{
             print(error.localizedDescription)
         })
     }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "replyFromDetail"{
+            let destinationVC = segue.destination as? ReplyViewController
+            destinationVC?.originalTweet = tweet
+        }
+    }
 }

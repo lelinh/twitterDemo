@@ -26,10 +26,27 @@ class TimeLineViewController: UIViewController {
     var selectedRow = 0
     // Initialize a UIRefreshControl
     let refreshController = UIRefreshControl()
+    var isMoreDataLoading = false
+    var loadingMoreView:InfiniteScrollActivityView?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        initView()
+
         // Do any additional setup after loading the view.
+        
+        TableView.delegate = self
+        TableView.dataSource = self
+        //Instantiate ComposeViewController
+        let composeViewController = storyboard?.instantiateViewController(withIdentifier: "ComposeViewController") as! ComposeViewController
+        composeViewController.delegate = self
+        
+        TableView.estimatedRowHeight = 44.0
+        TableView.rowHeight = UITableViewAutomaticDimension
+        
+        //Navigation bar color
+        navigationController?.navigationBar.barTintColor = UIColor(red: 66/255, green: 223/255, blue: 244/255, alpha: 1)
+        navigationController?.navigationBar.tintColor = UIColor.white
+        //Get timeline
         TweeterClient.sharedInstance.getTimeline(success: { (tweets: [Tweet]) in
             self.tweets = tweets
             self.TableView.reloadData()
@@ -42,6 +59,16 @@ class TimeLineViewController: UIViewController {
         TableView.insertSubview(refreshController, at: 0)
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: 320, height: 50))
         headerView.backgroundColor = UIColor(white: 1, alpha: 0.9)
+        
+        // Set up Infinite Scroll loading indicator
+        let frame = CGRect(x: 0, y: TableView.contentSize.height, width: TableView.bounds.size.width, height: InfiniteScrollActivityView.defaultHeight)
+        loadingMoreView = InfiniteScrollActivityView(frame: frame)
+        loadingMoreView!.isHidden = true
+        TableView.addSubview(loadingMoreView!)
+        
+        var insets = TableView.contentInset
+        insets.bottom += InfiniteScrollActivityView.defaultHeight
+        TableView.contentInset = insets
     }
 
     override func didReceiveMemoryWarning() {
@@ -71,10 +98,19 @@ extension TimeLineViewController:UITableViewDelegate,UITableViewDataSource{
         cell.favoriteState = tweet.favoriteState
         cell.retweetState = tweet.retweetState
         cell.timestampLabel.text = tweet.timestamp
+        cell.retweetCountLabel.text = tweet.retweetCountString
+        cell.favoriteCountLabel.text = tweet.favoritesCountString
+        
+        if let temp = tweet.currentRetweetUser{
+            print(temp)
+        }else{
+            print("include_my_retweet is nil")
+        }
         if let screenname = tweet.user?.screenName {
             cell.screenNameLabel.text = "@\(screenname)"
         }
         cell.textLabel?.sizeToFit()
+        
         if tweet.favoriteState! {
             cell.favoriteButton.setImage(#imageLiteral(resourceName: "like_on").withRenderingMode(.alwaysOriginal), for: cell.favoriteButton.state)
         }else{
@@ -89,14 +125,6 @@ extension TimeLineViewController:UITableViewDelegate,UITableViewDataSource{
         return cell
     }
     func  initView() {
-        TableView.delegate = self
-        TableView.dataSource = self
-        TableView.estimatedRowHeight = 44.0
-        TableView.rowHeight = UITableViewAutomaticDimension
-        
-        //Navigation bar color
-        navigationController?.navigationBar.barTintColor = UIColor(red: 66/255, green: 223/255, blue: 244/255, alpha: 1)
-        navigationController?.navigationBar.tintColor = UIColor.white
     }
 }
 extension TimeLineViewController:TweetCellDelegate{
@@ -126,26 +154,77 @@ extension TimeLineViewController:TweetCellDelegate{
     func retweetButtonClicked(cell: TweetCell) {
         if cell.retweetState! == false {
             TweeterClient.sharedInstance.retweet(id: cell.id!, success: {(tweet: Tweet) in
-                self.tweets[(self.TableView.indexPath(for: cell)?.row)!].retweetState = true
+                let id = self.tweets[(self.TableView.indexPath(for: cell)?.row)!].tweetID
                 cell.retweetButton.setImage(#imageLiteral(resourceName: "retweet_on").withRenderingMode(.alwaysOriginal), for: cell.retweetButton.state)
                 //                self.TableView.reloadRows(at: [self.TableView.indexPath(for: cell)!], with: UITableViewRowAnimation.none)
-
-                self.TableView.reloadData()
+                TweeterClient.sharedInstance.showTweet(id: (id)!, success: {(tweet: Tweet) in
+                    self.tweets[(self.TableView.indexPath(for: cell)?.row)!] = tweet
+                    self.TableView.reloadData()
+                }, failure: {(error: NSError) in
+                    print(error.localizedDescription)
+                })
             }, failure: {(error: NSError) in
                 print(error.localizedDescription)
             })
         }else{
             TweeterClient.sharedInstance.unretweet(id: cell.id!, success: {(tweet: Tweet) in
-                self.tweets[(self.TableView.indexPath(for: cell)?.row)!].retweetState = false
+                let id = self.tweets[(self.TableView.indexPath(for: cell)?.row)!].tweetID
                 cell.retweetButton.setImage(#imageLiteral(resourceName: "retweet_off").withRenderingMode(.alwaysOriginal), for: cell.retweetButton.state)
-                //                self.TableView.reload
-                
-                self.TableView.reloadData()
+                TweeterClient.sharedInstance.showTweet(id: (id)!, success: {(tweet: Tweet) in
+                    self.tweets[(self.TableView.indexPath(for: cell)?.row)!] = tweet
+                    self.TableView.reloadData()
+                }, failure: {(error: NSError) in
+                    print(error.localizedDescription)
+                })
                 
             }, failure: {(error: NSError) in
                 print(error.localizedDescription)
             })
         }
+    }
+}
+extension TimeLineViewController: UIScrollViewDelegate{
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if (!isMoreDataLoading) {
+            // Calculate the position of one screen length before the bottom of the results
+            let scrollViewContentHeight = TableView.contentSize.height
+            let scrollOffsetThreshold = scrollViewContentHeight - TableView.bounds.size.height
+            
+            // When the user has scrolled past the threshold, start requesting
+            if(scrollView.contentOffset.y > scrollOffsetThreshold && TableView.isDragging) {
+                isMoreDataLoading = true
+                
+                // Update position of loadingMoreView, and start loading indicator
+                let frame = CGRect(x: 0, y: TableView.contentSize.height, width: TableView.bounds.size.width, height: InfiniteScrollActivityView.defaultHeight)
+                loadingMoreView?.frame = frame
+                loadingMoreView!.startAnimating()
+                
+                // Code to load more results
+                loadMoreData()		
+            }
+        }
+    }
+    func loadMoreData() {
+        TweeterClient.sharedInstance.getTimelineBeforeID(id: (tweets.last?.tweetID ?? "0")!, success: { (tweets: [Tweet]) in
+            var copyTweets = tweets
+            copyTweets.remove(at: 0)
+            self.tweets = self.tweets + copyTweets
+            
+            // Update flag
+            self.isMoreDataLoading = false
+            //remove top tweets
+            if self.tweets.count>100{
+                for i in 1...20{
+                    self.tweets.remove(at: i)
+                }
+            }
+            // Stop the loading indicator
+            self.loadingMoreView!.stopAnimating()
+            
+            self.TableView.reloadData()
+        }, failure: { (error: NSError) in
+            print(error.localizedDescription)
+        })
     }
 }
 extension TimeLineViewController{
@@ -154,6 +233,9 @@ extension TimeLineViewController{
             selectedRow = (TableView.indexPathForSelectedRow?.row)!
             let destinationVC = segue.destination as? DetailViewController
             destinationVC?.tweet = tweets[selectedRow]
+        }else if segue.identifier == "replyFromTimeline"{
+            let destinationVC = segue.destination as? ReplyViewController
+            destinationVC?.originalTweet = tweets[selectedRow]
         }
     }
     func refreshControlAction(refreshController: UIRefreshControl) {
@@ -174,5 +256,12 @@ extension TimeLineViewController{
 //        }, failure: { (error: NSError) in
 //            print(error.localizedDescription)
 //        })
+    }
+}
+extension TimeLineViewController: ComposeViewControllerDelegate{
+    func sentTweet(tweet: Tweet) {
+        tweets.insert(tweet, at: 0)
+        print(tweets[0])
+        TableView.reloadData()
     }
 }

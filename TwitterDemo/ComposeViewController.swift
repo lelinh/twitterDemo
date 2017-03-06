@@ -9,8 +9,14 @@
 import UIKit
 import AFNetworking
 
+
+@objc protocol ComposeViewControllerDelegate{
+    @objc optional func sentTweet(tweet: Tweet)
+}
+
 class ComposeViewController: UIViewController {
 
+    weak var delegate: ComposeViewControllerDelegate?
     
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var avatarImage: UIImageView!
@@ -21,6 +27,8 @@ class ComposeViewController: UIViewController {
         if composeTextView.text.characters.count>0 {
             TweeterClient.sharedInstance.updateStatus(status: composeTextView.text, success: {(tweet: Tweet) in
                 print("status is updated")
+                print(tweet)
+                self.delegate?.sentTweet!(tweet: tweet)
             },failure: {(error: NSError) in
                 print(error.localizedDescription)
             })

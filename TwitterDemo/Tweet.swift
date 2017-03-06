@@ -14,12 +14,15 @@ class Tweet: NSObject {
     var text: String?
     var timestamp: String?
     var retweetCount = 0
+    var retweetCountString = ""
     var favoritesCount = 0
+    var favoritesCountString = ""
 
     var user: User?
     var favoriteState: Bool?
     var retweetState:Bool?
     var tweetID: String?
+    var currentRetweetUser: NSDictionary?
     
     init(tweet: NSDictionary) {
         
@@ -30,7 +33,7 @@ class Tweet: NSObject {
         favoriteState  = tweet["favorited"] as? Bool
         retweetState = tweet["retweeted"] as? Bool
         tweetID = tweet["id_str"] as? String
-        
+        currentRetweetUser = (tweet["include_my_retweet"] as? NSDictionary?)!
         let timestampString = (tweet["created_at"] as? String)
 
         if let timestampString = timestampString {
@@ -39,6 +42,26 @@ class Tweet: NSObject {
             let time = formatter.date(from: timestampString)
             formatter.dateFormat = "MMM d, h:mm a"
             timestamp = formatter.string(from:time! as Date)
+            timestamp = (time as? NSDate)?.timeAgo()
+        }
+        if retweetCount>1000000 {
+            let temp = (Double(retweetCount)/1000000)
+            retweetCountString = String(format: "%.2f M", temp)
+        }else if retweetCount>1000 {
+            let temp = (Double(retweetCount)/1000)
+            retweetCountString = String(format: "%.2f K", temp)
+        }else{
+            retweetCountString = String(format: "%d",retweetCount)
+        }
+        
+        if favoritesCount>1000000 {
+            let temp = (Double(favoritesCount)/1000000)
+            favoritesCountString = String(format: "%.2f M", temp)
+        }else if favoritesCount>1000 {
+            let temp = (Double(favoritesCount)/1000)
+            favoritesCountString = String(format: "%.2f K", temp)
+        }else{
+            favoritesCountString = String(format: "%d",favoritesCount)
         }
     }
     

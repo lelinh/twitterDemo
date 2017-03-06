@@ -28,7 +28,7 @@ class TweeterClient: BDBOAuth1SessionManager {
             self.loginSuccess = success
             self.loginFailure = failure
             if let response = response{
-                print("request token: \(response.token!)")
+                print("debug: request token: \(response.token!)")
                 let authURL = URL(string: "https://api.twitter.com/oauth/authorize?oauth_token=\(response.token!)")
                 UIApplication.shared.open(authURL!, options: [:], completionHandler: nil)
             }
@@ -41,12 +41,14 @@ class TweeterClient: BDBOAuth1SessionManager {
         User.currentUser = nil
         deauthorize()
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: User.didLogoutNotification), object: nil)
+        print("debug: \(User.currentUser)")
+
     }
     func handleOpenUrl(url: URL) {
         print(url)
         let requestToken = BDBOAuth1Credential(queryString: url.query)
         fetchAccessToken(withPath: "oauth/access_token", method: "POST", requestToken: requestToken, success: { (accessToken: BDBOAuth1Credential?) in
-            print("access token = \(accessToken!.token)")
+            print("debug: access token = \(accessToken!.token)")
             self.UserInfo(success: { (user: User) in
                 User.currentUser = user
                 self.loginSuccess?()
@@ -62,12 +64,24 @@ class TweeterClient: BDBOAuth1SessionManager {
         })
     }
     
-    func getTimeline(success: @escaping ([Tweet]) -> (),failure: @escaping (NSError) -> ()) {
-        get("1.1/statuses/home_timeline.json", parameters: nil, progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
+    func getTimelineBeforeID(id: String,success: @escaping ([Tweet]) -> (),failure: @escaping (NSError) -> ()) {
+        get("1.1/statuses/home_timeline.json", parameters: ["max_id":id,"include_my_retweet":true], progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
             let dictionaries = response as! [NSDictionary]
             let tweets = Tweet.tweetWithArray(dictionaries: dictionaries)
-
             success(tweets)
+            print("debug: get timeline since id:\(id)====new id:\(tweets[0].tweetID)")
+            
+        }, failure: { (_:URLSessionDataTask?, error:Error?) in
+            failure(error as! NSError)
+        })
+    }
+    func getTimeline(success: @escaping ([Tweet]) -> (),failure: @escaping (NSError) -> ()) {
+        get("1.1/statuses/home_timeline.json", parameters: ["include_my_retweet":true], progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
+            let dictionaries = response as! [NSDictionary]
+            let tweets = Tweet.tweetWithArray(dictionaries: dictionaries)
+            
+            success(tweets)
+            print("debug: get timeline ===\(tweets[0].tweetID)+\(tweets[0].user?.screenName)")
             
         }, failure: { (_:URLSessionDataTask?, error:Error?) in
             failure(error as! NSError)
@@ -75,7 +89,16 @@ class TweeterClient: BDBOAuth1SessionManager {
     }
     func updateStatus(status: String, success: @escaping (Tweet) -> (),failure: @escaping (NSError) -> ()) {
         post("1.1/statuses/update.json", parameters: ["status":status], progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
-            print("liked: \(response)")
+            let tweet = Tweet(tweet: response as! NSDictionary)
+            success(tweet)
+            print("debug: update status == \(tweet.text)")
+        }, failure: { (_:URLSessionDataTask?, error:Error?) in
+            failure(error as! NSError)
+        })
+    }
+    func replyTweet(status: String,id: String,user: String, success: @escaping (Tweet) -> (),failure: @escaping (NSError) -> ()) {
+        post("1.1/statuses/update.json", parameters: ["status":status,"in_reply_to_status_id":id], progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
+            print("debug: reply : \(response)")
             let tweet = Tweet(tweet: response as! NSDictionary)
             success(tweet)
         }, failure: { (_:URLSessionDataTask?, error:Error?) in
@@ -86,6 +109,7 @@ class TweeterClient: BDBOAuth1SessionManager {
         post("1.1/favorites/create.json", parameters: ["id":id], progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
             let tweet = Tweet(tweet: response as! NSDictionary)
             success(tweet)
+            print("debug: liked ==\(tweet.text)")
         }, failure: { (_:URLSessionDataTask?, error:Error?) in
             failure(error as! NSError)
         })
@@ -95,6 +119,8 @@ class TweeterClient: BDBOAuth1SessionManager {
         post("1.1/favorites/destroy.json", parameters: ["id":id], progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
             let tweet = Tweet(tweet: response as! NSDictionary)
             success(tweet)
+            print("debug: unliked ==\(tweet.text)")
+
         }, failure: { (_:URLSessionDataTask?, error:Error?) in
             failure(error as! NSError)
         })
@@ -103,6 +129,8 @@ class TweeterClient: BDBOAuth1SessionManager {
         post("1.1/statuses/retweet/\(id).json", parameters: ["id":id], progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
             let tweet = Tweet(tweet: response as! NSDictionary)
             success(tweet)
+            print("debug: retweet ==\(tweet.text)")
+
         }, failure: { (_:URLSessionDataTask?, error:Error?) in
             print(id)
             failure(error as! NSError)
@@ -112,6 +140,8 @@ class TweeterClient: BDBOAuth1SessionManager {
         post("1.1/statuses/unretweet/\(id).json", parameters: ["id":id], progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
             let tweet = Tweet(tweet: response as! NSDictionary)
             success(tweet)
+            print("debug: unretweet ==\(tweet.text)")
+
         }, failure: { (_:URLSessionDataTask?, error:Error?) in
             failure(error as! NSError)
         })
@@ -120,6 +150,8 @@ class TweeterClient: BDBOAuth1SessionManager {
         get("1.1/statuses/show.json", parameters: ["id":id], progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
             let tweet = Tweet(tweet: response as! NSDictionary)
             success(tweet)
+            print("debug: load tweet with id ==\(tweet.text)")
+
         }, failure: { (_:URLSessionDataTask?, error:Error?) in
             failure(error as! NSError)
         })
@@ -129,6 +161,8 @@ class TweeterClient: BDBOAuth1SessionManager {
             print("user account: \(response)")
             let user = User(user: response as! NSDictionary)
             success(user)
+            print("debug: user infor ==\(user.screenName)")
+
         }, failure: { (_:URLSessionDataTask?, error:Error?) in
             print(error?.localizedDescription)
             failure(error as! NSError)
