@@ -65,7 +65,7 @@ class TweeterClient: BDBOAuth1SessionManager {
     }
     
     func getTimelineBeforeID(id: String,success: @escaping ([Tweet]) -> (),failure: @escaping (NSError) -> ()) {
-        get("1.1/statuses/home_timeline.json", parameters: ["max_id":id,"include_my_retweet":true], progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
+        get("1.1/statuses/home_timeline.json", parameters: ["max_id":id,"include_my_retweet":true,"include_entities":true], progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
             let dictionaries = response as! [NSDictionary]
             let tweets = Tweet.tweetWithArray(dictionaries: dictionaries)
             success(tweets)
@@ -76,12 +76,13 @@ class TweeterClient: BDBOAuth1SessionManager {
         })
     }
     func getTimeline(success: @escaping ([Tweet]) -> (),failure: @escaping (NSError) -> ()) {
-        get("1.1/statuses/home_timeline.json", parameters: ["include_my_retweet":true], progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
+        get("1.1/statuses/home_timeline.json", parameters: ["include_my_retweet":true,"include_entities":true], progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
             let dictionaries = response as! [NSDictionary]
             let tweets = Tweet.tweetWithArray(dictionaries: dictionaries)
             
             success(tweets)
-            print("debug: get timeline ===\(tweets[0].tweetID)+\(tweets[0].user?.screenName)")
+            print("debug: get timeline ===\(tweets[0].tweetID)")
+            print("\(dictionaries[0])")
             
         }, failure: { (_:URLSessionDataTask?, error:Error?) in
             failure(error as! NSError)
@@ -147,7 +148,7 @@ class TweeterClient: BDBOAuth1SessionManager {
         })
     }
     func showTweet(id: String, success: @escaping (Tweet) -> (),failure: @escaping (NSError) -> ()) {
-        get("1.1/statuses/show.json", parameters: ["id":id], progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
+        get("1.1/statuses/show.json", parameters: ["id":id,"include_entities":true], progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
             let tweet = Tweet(tweet: response as! NSDictionary)
             success(tweet)
             print("debug: load tweet with id ==\(tweet.text)")
@@ -164,7 +165,7 @@ class TweeterClient: BDBOAuth1SessionManager {
             print("debug: user infor ==\(user.screenName)")
 
         }, failure: { (_:URLSessionDataTask?, error:Error?) in
-            print(error?.localizedDescription)
+            print(error?.localizedDescription ?? "")
             failure(error as! NSError)
         })
     }

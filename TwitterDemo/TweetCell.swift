@@ -26,6 +26,8 @@ class TweetCell: UITableViewCell {
     @IBOutlet weak var favoriteButton: UIButton!
     @IBOutlet weak var retweetCountLabel: UILabel!
     @IBOutlet weak var favoriteCountLabel: UILabel!
+    @IBOutlet weak var tweetImage: UIImageView!
+    @IBOutlet weak var imageHeightContraint: NSLayoutConstraint!
     
     @IBOutlet weak var retweetStatusImage: UIImageView!
     @IBOutlet weak var retweetStatusLabel: UILabel!
@@ -53,6 +55,8 @@ class TweetCell: UITableViewCell {
         // Initialization code
         avatarImage.layer.cornerRadius = 7 //set corner for image here
         avatarImage.clipsToBounds = true
+        tweetImage.layer.cornerRadius = 7 //set corner for image here
+        tweetImage.clipsToBounds = true
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

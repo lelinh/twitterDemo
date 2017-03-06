@@ -27,7 +27,10 @@ class DetailViewController: UIViewController {
     
     @IBOutlet weak var retweetCountLabel: UILabel!
     @IBOutlet weak var likeCountLabel: UILabel!
+    @IBOutlet weak var tweetImage: UIImageView!
+    @IBOutlet weak var imageHeightContrant: NSLayoutConstraint!
     
+    @IBOutlet weak var imageWidthContraint: NSLayoutConstraint!
     
     @IBAction func replyClicked(_ sender: Any) {
     }
@@ -91,6 +94,37 @@ extension DetailViewController{
         likeButton.setImage(#imageLiteral(resourceName: "like_off").withRenderingMode(.alwaysOriginal), for: self.likeButton.state)
         retweetButton.setImage(#imageLiteral(resourceName: "retweet_off").withRenderingMode(.alwaysOriginal), for: .normal)
         replyButton.setImage(#imageLiteral(resourceName: "reply").withRenderingMode(.alwaysOriginal), for: .normal)
+        
+        tweetImage.layer.cornerRadius = 7 //set corner for image here
+        tweetImage.clipsToBounds = true
+        
+        if let imageUrl = (tweet?.media?["media_url_https"] as? String){
+            print("debug: \(imageUrl)")
+            tweetImage.setImageWith(URL(string: imageUrl)!)
+            let tweetImageHeigh = tweetImage.image?.size.height
+            let tweetImageWidth = tweetImage.image?.size.width
+            let widthRatio = tweetImageWidth!/UIScreen.main.bounds.width
+            let heighRatio = tweetImageHeigh!/UIScreen.main.bounds.height*2.0
+            
+            if widthRatio>heighRatio {
+                if widthRatio>1 {
+                    imageWidthContraint.constant = UIScreen.main.bounds.width - 40.0
+                    imageHeightContrant.constant = tweetImageHeigh!*(imageWidthContraint.constant/tweetImageWidth!)
+                }else{
+                    imageWidthContraint.constant = tweetImageWidth!
+                }
+            }else{
+                if heighRatio>1 {
+                    imageHeightContrant.constant = UIScreen.main.bounds.height/2.0
+                    imageWidthContraint.constant = tweetImageWidth!*(imageHeightContrant.constant/tweetImageHeigh!)
+                }else{
+                    imageHeightContrant.constant = tweetImageHeigh!
+                }
+            }
+            
+        }else{
+            imageHeightContrant.constant = 0
+        }
 
     }
     func updateView(){

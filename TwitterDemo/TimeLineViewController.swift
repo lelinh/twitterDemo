@@ -101,11 +101,27 @@ extension TimeLineViewController:UITableViewDelegate,UITableViewDataSource{
         cell.retweetCountLabel.text = tweet.retweetCountString
         cell.favoriteCountLabel.text = tweet.favoritesCountString
         
-        if let temp = tweet.currentRetweetUser{
-            print(temp)
+//        if let temp = tweet.currentRetweetUser{
+//            cell.retweetStatusLabel.text = temp["id_str"] as! String
+//            cell.retweetStatusLabel.text = temp["id_str"] as! String
+//            print(temp)
+//        }else{
+//            
+//            cell.retweetStatusLabel.heightAnchor.constraint(equalTo: cell.retweetStatusLabel.heightAnchor, multiplier: 1.5)
+//            cell.retweetStatusImage.heightAnchor.constraint(equalTo: cell.retweetStatusImage.heightAnchor, multiplier: 2.0)
+//            print("include_my_retweet is nil")
+//        }
+        if let imageUrl = (tweet.media?["media_url_https"] as? String){
+//            print("debug: \(imageUrl)")
+            cell.tweetImage.setImageWith(URL(string: imageUrl)!)
+            cell.imageHeightContraint.constant = 135
+
         }else{
-            print("include_my_retweet is nil")
+            cell.tweetImage.image = nil
+            cell.imageHeightContraint.constant = 0
+//            print("empty image")
         }
+        
         if let screenname = tweet.user?.screenName {
             cell.screenNameLabel.text = "@\(screenname)"
         }
@@ -209,19 +225,18 @@ extension TimeLineViewController: UIScrollViewDelegate{
             var copyTweets = tweets
             copyTweets.remove(at: 0)
             self.tweets = self.tweets + copyTweets
+            // Stop the loading indicator
+            self.loadingMoreView!.stopAnimating()
             
-            // Update flag
-            self.isMoreDataLoading = false
             //remove top tweets
             if self.tweets.count>100{
                 for i in 1...20{
                     self.tweets.remove(at: i)
                 }
             }
-            // Stop the loading indicator
-            self.loadingMoreView!.stopAnimating()
-            
             self.TableView.reloadData()
+            // Update flag
+            self.isMoreDataLoading = false
         }, failure: { (error: NSError) in
             print(error.localizedDescription)
         })
