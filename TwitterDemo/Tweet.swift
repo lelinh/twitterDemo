@@ -50,20 +50,20 @@ class Tweet: NSObject {
         }
         if retweetCount>1000000 {
             let temp = (Double(retweetCount)/1000000)
-            retweetCountString = String(format: "%.2f M", temp)
+            retweetCountString = String(format: "%.2fM", temp)
         }else if retweetCount>1000 {
             let temp = (Double(retweetCount)/1000)
-            retweetCountString = String(format: "%.2f K", temp)
+            retweetCountString = String(format: "%.2fK", temp)
         }else{
             retweetCountString = String(format: "%d",retweetCount)
         }
         
         if favoritesCount>1000000 {
             let temp = (Double(favoritesCount)/1000000)
-            favoritesCountString = String(format: "%.2f M", temp)
+            favoritesCountString = String(format: "%.2fM", temp)
         }else if favoritesCount>1000 {
             let temp = (Double(favoritesCount)/1000)
-            favoritesCountString = String(format: "%.2f K", temp)
+            favoritesCountString = String(format: "%.2fK", temp)
         }else{
             favoritesCountString = String(format: "%d",favoritesCount)
         }

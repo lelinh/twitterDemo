@@ -14,23 +14,28 @@ class DetailViewController: UIViewController {
     
     var tweet: Tweet?
     
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var contentView: UIView!
     
     @IBOutlet weak var avatarImage: UIImageView!
-
     @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var timestampLabel: UILabel!
-    
+    @IBOutlet weak var tweetImage: UIImageView!
+
     @IBOutlet weak var replyButton: UIButton!
     @IBOutlet weak var retweetButton: UIButton!
     @IBOutlet weak var likeButton: UIButton!
     
     @IBOutlet weak var retweetCountLabel: UILabel!
     @IBOutlet weak var likeCountLabel: UILabel!
-    @IBOutlet weak var tweetImage: UIImageView!
-    @IBOutlet weak var imageHeightContrant: NSLayoutConstraint!
     
+    
+    
+    @IBOutlet weak var imageHeightContrant: NSLayoutConstraint!
     @IBOutlet weak var imageWidthContraint: NSLayoutConstraint!
+    @IBOutlet weak var viewContrain: NSLayoutConstraint!
     
     @IBAction func replyClicked(_ sender: Any) {
     }
@@ -91,6 +96,8 @@ class DetailViewController: UIViewController {
 extension DetailViewController{
 
     func initView() {
+        tableView.delegate = self
+        tableView.dataSource = self
         likeButton.setImage(#imageLiteral(resourceName: "like_off").withRenderingMode(.alwaysOriginal), for: self.likeButton.state)
         retweetButton.setImage(#imageLiteral(resourceName: "retweet_off").withRenderingMode(.alwaysOriginal), for: .normal)
         replyButton.setImage(#imageLiteral(resourceName: "reply").withRenderingMode(.alwaysOriginal), for: .normal)
@@ -125,12 +132,19 @@ extension DetailViewController{
         }else{
             imageHeightContrant.constant = 0
         }
+        viewContrain.constant = imageHeightContrant.constant + avatarImage.frame.size.height + tableView.frame.size.height + 250
+        print("debug1:\(viewContrain.constant)")
+        scrollView.contentSize = CGSize(width: scrollView.frame.width, height: viewContrain.constant)
 
     }
     func updateView(){
         // Initialization code
         avatarImage.layer.cornerRadius = 7 //set corner for image here
         avatarImage.clipsToBounds = true
+        print("debug: scrollView \(scrollView.bounds)")
+        print("debug: scrollView content \(scrollView.contentSize)")
+        print("debug: view \(view.frame.height)")
+
         TweeterClient.sharedInstance.showTweet(id: (tweet?.tweetID)!, success: {(tweet: Tweet) in
             self.tweet = tweet
             
@@ -138,8 +152,8 @@ extension DetailViewController{
             self.statusLabel.text = tweet.text
             self.avatarImage.setImageWith((tweet.user?.profileUrl)!)
             self.timestampLabel.text = tweet.timestamp
-            self.retweetCountLabel.text = "\(tweet.retweetCount) Retweets"
-            self.likeCountLabel.text = "\(tweet.favoritesCount) Likes"
+            self.retweetCountLabel.text = "\(tweet.retweetCountString) Retweets"
+            self.likeCountLabel.text = "\(tweet.favoritesCountString) Likes"
 
             if (tweet.favoriteState)! {
                 self.likeButton.setImage(#imageLiteral(resourceName: "like_on").withRenderingMode(.alwaysOriginal), for: self.likeButton.state)
@@ -159,5 +173,19 @@ extension DetailViewController{
             let destinationVC = segue.destination as? ReplyViewController
             destinationVC?.originalTweet = tweet
         }
+    }
+}
+
+extension DetailViewController: UITableViewDelegate,UITableViewDataSource{
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 20
+    }
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "commentCell", for: indexPath) as! CommentCell
+        cell.nameLabel.text = ""
+        cell.commentLabel.text = ""
+//        cell.avatarImage =
+        return cell
     }
 }

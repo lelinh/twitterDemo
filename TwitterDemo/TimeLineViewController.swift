@@ -265,12 +265,14 @@ extension TimeLineViewController{
 
     }
     override func viewWillAppear(_ animated: Bool) {
-//        TweeterClient.sharedInstance.getTimeline(success: { (tweets: [Tweet]) in
-//            self.tweets = tweets
-//            self.TableView.reloadData()
-//        }, failure: { (error: NSError) in
-//            print(error.localizedDescription)
-//        })
+        if tweets.count>1 {
+            TweeterClient.sharedInstance.getTimelineBeforeID(id: tweets[0].tweetID!,success: { (tweets: [Tweet]) in
+                self.tweets = tweets
+                self.TableView.reloadData()
+            }, failure: { (error: NSError) in
+                print(error.localizedDescription)
+            })
+        }
     }
 }
 extension TimeLineViewController: ComposeViewControllerDelegate{

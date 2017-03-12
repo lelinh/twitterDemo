@@ -65,7 +65,7 @@ class TweeterClient: BDBOAuth1SessionManager {
     }
     
     func getTimelineBeforeID(id: String,success: @escaping ([Tweet]) -> (),failure: @escaping (NSError) -> ()) {
-        get("1.1/statuses/home_timeline.json", parameters: ["max_id":id,"include_my_retweet":true,"include_entities":true], progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
+        get("1.1/statuses/home_timeline.json", parameters: ["max_id":id,"count":200,"include_my_retweet":true,"include_entities":true], progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
             let dictionaries = response as! [NSDictionary]
             let tweets = Tweet.tweetWithArray(dictionaries: dictionaries)
             success(tweets)
@@ -76,7 +76,7 @@ class TweeterClient: BDBOAuth1SessionManager {
         })
     }
     func getTimeline(success: @escaping ([Tweet]) -> (),failure: @escaping (NSError) -> ()) {
-        get("1.1/statuses/home_timeline.json", parameters: ["include_my_retweet":true,"include_entities":true], progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
+        get("1.1/statuses/home_timeline.json", parameters: ["count":200,"include_my_retweet":true,"include_entities":true], progress: nil, success: { (_:URLSessionDataTask, response:Any?) in
             let dictionaries = response as! [NSDictionary]
             let tweets = Tweet.tweetWithArray(dictionaries: dictionaries)
             
